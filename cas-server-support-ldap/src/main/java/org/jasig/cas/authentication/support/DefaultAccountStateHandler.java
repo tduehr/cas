@@ -6,7 +6,6 @@ import org.jasig.cas.authentication.AccountPasswordMustChangeException;
 import org.jasig.cas.authentication.InvalidLoginLocationException;
 import org.jasig.cas.authentication.InvalidLoginTimeException;
 import org.jasig.cas.authentication.MessageDescriptor;
-import org.jasig.cas.util.DateTimeUtils;
 
 import org.ldaptive.auth.AccountState;
 import org.ldaptive.auth.AuthenticationResponse;
@@ -133,7 +132,7 @@ public class DefaultAccountStateHandler implements AccountStateHandler {
             return;
         }
 
-        final ZonedDateTime expDate = DateTimeUtils.zonedDateTimeOf(warning.getExpiration());
+        final ZonedDateTime expDate = warning.getExpiration();
         final long ttl = ZonedDateTime.now(ZoneOffset.UTC).until(expDate, ChronoUnit.DAYS);
         logger.debug(
                 "Password expires in {} days. Expiration warning threshold is {} days.",
