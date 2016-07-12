@@ -29,6 +29,13 @@ public class WarningCookieRetrievingCookieGenerator extends CookieRetrievingCook
 
     @Override
     @Autowired
+    public void setCookieDomain(@Value("${warn.cookie.domain:}")
+                                  final String cookieDomain) {
+        super.setCookieDomain(cookieDomain);
+    }
+
+    @Override
+    @Autowired
     public void setCookieMaxAge(@Value("${warn.cookie.maxAge:-1}")
                                     final Integer cookieMaxAge) {
         super.setCookieMaxAge(cookieMaxAge);
