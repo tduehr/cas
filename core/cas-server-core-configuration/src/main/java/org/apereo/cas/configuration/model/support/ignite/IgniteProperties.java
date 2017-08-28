@@ -156,6 +156,11 @@ public class IgniteProperties implements Serializable {
     @NestedConfigurationProperty
     private EncryptionRandomizedSigningJwtCryptographyProperties crypto = new EncryptionRandomizedSigningJwtCryptographyProperties();
 
+    /**
+     * Sets the logging frquency for metrics. Set to 0 to disable.
+     */
+    private String metricsLogFrequency;
+
     public long getAckTimeout() {
         return Duration.parse(ackTimeout).toMillis();
     }
@@ -300,12 +305,12 @@ public class IgniteProperties implements Serializable {
         this.trustStorePassword = trustStorePassword;
     }
 
-    public List<String> getIgniteAddress() {
+    public List<String> getIgniteAddresses() {
         return igniteAddress;
     }
 
-    public void setIgniteAddress(final List<String> igniteAddress) {
-        this.igniteAddress = igniteAddress;
+    public void setIgniteAddresses(final List<String> igniteAddresses) {
+        this.igniteAddress = igniteAddresses;
     }
 
     public TicketsCache getTicketsCache() {
@@ -338,6 +343,18 @@ public class IgniteProperties implements Serializable {
 
     public void setFailureDetectionTimeout(String failureDetectionTimeout) {
         this.failureDetectionTimeout = failureDetectionTimeout;
+    }
+
+    public void setMetricsLogFrequency(String metricsLogFrequency) {
+        this.metricsLogFrequency = metricsLogFrequency;
+    }
+
+    public String getMetricsLogFrequency() {
+        return metricsLogFrequency;
+    }
+
+    public long getMetricsLogFrequencyMillis() {
+        return Beans.newDuration(metricsLogFrequency).toMillis();
     }
 
     public static class TicketsCache implements Serializable {

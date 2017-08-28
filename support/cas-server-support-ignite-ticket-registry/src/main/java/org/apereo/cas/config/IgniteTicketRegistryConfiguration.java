@@ -69,7 +69,7 @@ public class IgniteTicketRegistryConfiguration {
         spi.setForceServerMode(ignite.isForceServerMode());
 
         final TcpDiscoveryVmIpFinder finder = new TcpDiscoveryVmIpFinder();
-        finder.setAddresses(ignite.getIgniteAddress());
+        finder.setAddresses(ignite.getIgniteAddresses());
         spi.setIpFinder(finder);
         config.setDiscoverySpi(spi);
         final Collection<CacheConfiguration> cacheConfigurations = buildIgniteTicketCaches(ignite, ticketCatalog);
@@ -82,6 +82,10 @@ public class IgniteTicketRegistryConfiguration {
 
         if (!StringUtils.isBlank(ignite.getClientFailureDetectionTimeout())) {
             config.setClientFailureDetectionTimeout(ignite.getClientFailureDetectionTimeoutMillis());
+        }
+
+        if (!StringUtils.isBlank(ignite.getMetricsLogFrequency())) {
+            config.setMetricsLogFrequency(ignite.getMetricsLogFrequencyMillis());
         }
 
         return config;

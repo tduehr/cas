@@ -4452,6 +4452,7 @@ To learn more about this topic, [please review this guide](Ignite-Ticket-Registr
 # cas.ticket.registry.ignite.ackTimeout=2000
 # cas.ticket.registry.ignite.failureDetectionTimeout=
 # cas.ticket.registry.ignite.clientFailureDetectionTimeout=
+# cas.ticket.registry.ignite.metricsLogFrequency=
 # cas.ticket.registry.ignite.joinTimeout=1000
 # cas.ticket.registry.ignite.localAddress=
 # cas.ticket.registry.ignite.localPort=-1
