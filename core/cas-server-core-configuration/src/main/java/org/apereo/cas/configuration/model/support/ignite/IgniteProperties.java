@@ -124,6 +124,16 @@ public class IgniteProperties implements Serializable {
     private String socketTimeout = "PT5S";
 
     /**
+     * Failure detection timeout set to use for network related operations.
+     */
+    private String failureDetectionTimeout;
+
+    /**
+     * Client failure detection timeout set to use for network related operations.
+     */
+    private String clientFailureDetectionTimeout;
+
+    /**
      * Sets thread priority. All threads within SPI will be started with it.
      */
     private int threadPriority = 10;
@@ -304,6 +314,30 @@ public class IgniteProperties implements Serializable {
 
     public void setTicketsCache(final TicketsCache ticketsCache) {
         this.ticketsCache = ticketsCache;
+    }
+
+    public String getClientFailureDetectionTimeout() {
+        return clientFailureDetectionTimeout;
+    }
+
+    public long getClientFailureDetectionTimeoutMillis() {
+        return Beans.newDuration(clientFailureDetectionTimeout).toMillis();
+    }
+
+    public void setClientFailureDetectionTimeout(String clientFailureDetectionTimeout) {
+        this.clientFailureDetectionTimeout = clientFailureDetectionTimeout;
+    }
+
+    public String getFailureDetectionTimeout() {
+        return failureDetectionTimeout;
+    }
+
+    public long getFailureDetectionTimeoutMillis() {
+        return Beans.newDuration(failureDetectionTimeout).toMillis();
+    }
+
+    public void setFailureDetectionTimeout(String failureDetectionTimeout) {
+        this.failureDetectionTimeout = failureDetectionTimeout;
     }
 
     public static class TicketsCache implements Serializable {

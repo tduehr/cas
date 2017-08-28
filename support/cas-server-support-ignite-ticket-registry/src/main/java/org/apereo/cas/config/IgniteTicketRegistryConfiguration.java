@@ -1,5 +1,6 @@
 package org.apereo.cas.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.cache.CacheWriteSynchronizationMode;
@@ -20,7 +21,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -75,6 +75,14 @@ public class IgniteTicketRegistryConfiguration {
         final Collection<CacheConfiguration> cacheConfigurations = buildIgniteTicketCaches(ignite, ticketCatalog);
         config.setCacheConfiguration(cacheConfigurations.toArray(new CacheConfiguration[]{}));
         config.setClientMode(ignite.isClientMode());
+
+        if (!StringUtils.isBlank(ignite.getFailureDetectionTimeout())) {
+            config.setFailureDetectionTimeout(ignite.getFailureDetectionTimeoutMillis());
+        }
+
+        if (!StringUtils.isBlank(ignite.getClientFailureDetectionTimeout())) {
+            config.setClientFailureDetectionTimeout(ignite.getClientFailureDetectionTimeoutMillis());
+        }
 
         return config;
     }
