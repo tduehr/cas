@@ -11,8 +11,10 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apereo.cas.authentication.Authentication;
+import org.apereo.cas.util.serialization.ZonedDateTimeConvertor;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
@@ -66,6 +68,7 @@ public abstract class AbstractTicket implements Ticket, TicketState {
      * The last time this ticket was used.
      */
     @Column(name = "LAST_TIME_USED", length = Integer.MAX_VALUE)
+    @Convert(converter = ZonedDateTimeConvertor.class)
     @Getter
     private ZonedDateTime lastTimeUsed;
 
@@ -73,6 +76,7 @@ public abstract class AbstractTicket implements Ticket, TicketState {
      * The previous last time this ticket was used.
      */
     @Column(name = "PREVIOUS_LAST_TIME_USED", length = Integer.MAX_VALUE)
+    @Convert(converter = ZonedDateTimeConvertor.class)
     @Getter
     private ZonedDateTime previousTimeUsed;
 
@@ -80,6 +84,7 @@ public abstract class AbstractTicket implements Ticket, TicketState {
      * The time the ticket was created.
      */
     @Column(name = "CREATION_TIME", length = Integer.MAX_VALUE)
+    @Convert(converter = ZonedDateTimeConvertor.class)
     @Getter
     private ZonedDateTime creationTime;
 

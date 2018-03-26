@@ -9,9 +9,11 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apereo.cas.util.serialization.ZonedDateTimeConvertor;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -64,6 +66,7 @@ public class OneTimeTokenAccount implements Serializable, Comparable<OneTimeToke
     private String username;
 
     @Column
+    @Convert(converter = ZonedDateTimeConvertor.class)
     private ZonedDateTime registrationDate = ZonedDateTime.now(ZoneOffset.UTC);
 
     public OneTimeTokenAccount() {

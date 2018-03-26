@@ -1,10 +1,13 @@
 package org.apereo.cas.support.events.dao;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apereo.cas.authentication.adaptive.geo.GeoLocationRequest;
-import org.apereo.cas.util.DateTimeUtils;
 import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -15,14 +18,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.ToString;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * This is {@link CasEvent}, which represents a single event stored in the events repository.
@@ -51,7 +49,7 @@ public class CasEvent {
     private String principalId;
 
     @Column(nullable = false)
-    private String creationTime;
+    private ZonedDateTime creationTime;
 
     @ElementCollection
     @MapKeyColumn(name = "name")
@@ -64,23 +62,6 @@ public class CasEvent {
      */
     public CasEvent() {
         this.id = System.currentTimeMillis();
-    }
-
-    /**
-     * Gets creation time. Attempts to parse the value
-     * as a {@link ZonedDateTime}. Otherwise, assumes a
-     * {@link LocalDateTime} and converts it based on system's
-     * default zone.
-     *
-     * @return the creation time
-     */
-    public ZonedDateTime getCreationTime() {
-        final ZonedDateTime dt = DateTimeUtils.zonedDateTimeOf(this.creationTime);
-        if (dt != null) {
-            return dt;
-        }
-        final LocalDateTime lt = DateTimeUtils.localDateTimeOf(this.creationTime);
-        return DateTimeUtils.zonedDateTimeOf(lt.atZone(ZoneId.systemDefault()));
     }
 
     /**

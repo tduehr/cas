@@ -6,8 +6,10 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.builder.CompareToBuilder;
+import org.apereo.cas.util.serialization.ZonedDateTimeConvertor;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * This is {@link OneTimeToken}.
@@ -46,7 +48,8 @@ public class OneTimeToken implements Serializable, Comparable<OneTimeToken> {
     private String userId;
 
     @Column(nullable = false)
-    private LocalDateTime issuedDateTime = LocalDateTime.now();
+    @Convert(converter = ZonedDateTimeConvertor.class)
+    private ZonedDateTime issuedDateTime = ZonedDateTime.now();
 
     public OneTimeToken() {
         setId(java.lang.System.currentTimeMillis());

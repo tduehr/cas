@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apereo.cas.support.oauth.services.OAuthRegisteredService;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
@@ -64,6 +65,7 @@ public class OidcRegisteredService extends OAuthRegisteredService {
     private boolean implicit;
 
     @Column(name = "DYNAMIC_REG_TIME")
+    @Convert(converter = ZonedDateTimeConvertor.class)
     private ZonedDateTime dynamicRegistrationDateTime;
 
     @Lob

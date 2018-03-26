@@ -1,9 +1,14 @@
 package org.apereo.cas.ticket.registry.support;
 
+import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apereo.cas.util.serialization.ZonedDateTimeConvertor;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Id;
@@ -14,8 +19,6 @@ import javax.persistence.Version;
 import java.io.Serializable;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import lombok.ToString;
-import lombok.Getter;
 
 /**
  * JPA 2.0 implementation of an exclusive, non-reentrant lock.
@@ -174,6 +177,7 @@ public class JpaLockingStrategy implements LockingStrategy {
 
         /** Database column name that holds expiration date. */
         @Column(name = "expiration_date")
+        @Convert(converter = ZonedDateTimeConvertor.class)
         private ZonedDateTime expirationDate;
 
         @Version
