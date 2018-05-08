@@ -2,6 +2,7 @@ package org.apereo.cas.services;
 
 import org.apereo.cas.support.oauth.services.OAuthRegisteredService;
 import org.apereo.cas.support.saml.services.SamlRegisteredService;
+import org.apereo.cas.util.CollectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -190,6 +191,120 @@ public abstract class AbstractServiceRegistryTests {
         propertyMap.put("field1", property);
         rs.setProperties(propertyMap);
         return rs;
+    }
+
+    @Test
+    public void verifySaveMethodWithNonExistentServiceAndNoAttributes() {
+        final RegexRegisteredService r = new RegexRegisteredService();
+        r.setName("verifySaveMethodWithNonExistentServiceAndNoAttributes");
+        r.setServiceId("testId");
+        r.setTheme("theme");
+        r.setDescription("description");
+        r.setPublicKey(new RegisteredServicePublicKeyImpl("classpath:/test.pub", "RSA"));
+
+        final RegisteredService r2 = this.serviceRegistry.save(r);
+        final RegisteredService r3 = this.serviceRegistry.findServiceById(r2.getId());
+
+        assertEquals(r, r2);
+        assertEquals(r2, r3);
+    }
+
+    @Test
+    public void verifySaveAttributeReleasePolicy() {
+        final RegexRegisteredService r = new RegexRegisteredService();
+        r.setName("verifySaveAttributeReleasePolicy");
+        r.setServiceId("testId");
+        r.setTheme("theme");
+        r.setDescription("description");
+        r.setAttributeReleasePolicy(new ReturnAllAttributeReleasePolicy());
+        final DefaultRegisteredServiceAccessStrategy strategy = new DefaultRegisteredServiceAccessStrategy();
+        strategy.setDelegatedAuthenticationPolicy(
+            new DefaultRegisteredServiceDelegatedAuthenticationPolicy(CollectionUtils.wrapList("one", "two")));
+        r.setAccessStrategy(strategy);
+        final RegisteredService r2 = this.serviceRegistry.save(r);
+        final RegisteredService r3 = this.serviceRegistry.findServiceById(r2.getId());
+
+        assertEquals(r, r2);
+        assertEquals(r2, r3);
+        assertNotNull(r3.getAttributeReleasePolicy());
+        assertEquals(r2.getAttributeReleasePolicy(), r3.getAttributeReleasePolicy());
+    }
+
+    @Test
+    public void verifySaveMethodWithExistingServiceNoAttribute() {
+        final RegexRegisteredService r = new RegexRegisteredService();
+        r.setName("verifySaveMethodWithExistingServiceNoAttribute");
+        r.setServiceId("testId");
+        r.setTheme("theme");
+        r.setDescription("description");
+
+        this.serviceRegistry.save(r);
+
+        final List<RegisteredService> services = this.serviceRegistry.load();
+        final RegisteredService r2 = services.get(0);
+
+        r.setId(r2.getId());
+        this.serviceRegistry.save(r);
+
+        final RegisteredService r3 = this.serviceRegistry.findServiceById(r.getId());
+
+        assertEquals(r, r2);
+        assertEquals(r.getTheme(), r3.getTheme());
+    }
+
+    @Test
+    public void verifyRegisteredServiceProperties() {
+        final RegexRegisteredService r = new RegexRegisteredService();
+        r.setName("test");
+        r.setServiceId("testId");
+        r.setTheme("theme");
+        r.setDescription("description");
+
+        final Map propertyMap = new HashMap<>();
+
+        final DefaultRegisteredServiceProperty property = new DefaultRegisteredServiceProperty();
+        final Set<String> values = new HashSet<>();
+        values.add("value1");
+        values.add("value2");
+        property.setValues(values);
+        propertyMap.put("field1", property);
+
+        final DefaultRegisteredServiceProperty property2 = new DefaultRegisteredServiceProperty();
+
+        final Set<String> values2 = new HashSet<>();
+        values2.add("value1");
+        values2.add("value2");
+        property2.setValues(values2);
+        propertyMap.put("field2", property2);
+
+        r.setProperties(propertyMap);
+
+        this.serviceRegistry.save(r);
+
+        final RegisteredService r2 = this.serviceRegistry.load().get(0);
+        assertEquals(2, r2.getProperties().size());
+
+    }
+
+
+    @Test
+    public void verifyRegisteredServiceContacts() {
+        final RegexRegisteredService r = new RegexRegisteredService();
+        r.setName("testContacts");
+        r.setServiceId("testContacts");
+
+        final List contacts = new ArrayList<>();
+        final DefaultRegisteredServiceContact contact = new DefaultRegisteredServiceContact();
+        contact.setDepartment("department");
+        contact.setId(1234);
+        contact.setName("ContactName");
+        contact.setPhone("123-456-789");
+        contacts.add(contact);
+        r.setContacts(contacts);
+
+        this.serviceRegistry.save(r);
+        final RegisteredService r2 = this.serviceRegistry.load().get(0);
+        assertEquals(1, r2.getContacts().size());
     }
 
     public int getLoadSize() {
