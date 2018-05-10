@@ -10,6 +10,11 @@ if [ "$MATRIX_JOB_TYPE" == "TEST" ]; then
     echo "Upgrade Done"
 
     docker info
+
+    for server in ci/run-*-server.sh; do
+        chmod -R 777 ci
+        ./$server
+    done
 fi
 
 
