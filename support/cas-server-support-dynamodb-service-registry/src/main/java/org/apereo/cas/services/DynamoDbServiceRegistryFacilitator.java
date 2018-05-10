@@ -19,9 +19,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.amazonaws.services.dynamodbv2.model.TableDescription;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import lombok.Getter;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apereo.cas.configuration.model.support.dynamodb.DynamoDbServiceRegistryProperties;
 import org.apereo.cas.services.util.DefaultRegisteredServiceJsonSerializer;
 import org.apereo.cas.util.CollectionUtils;
@@ -35,6 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This is {@link DynamoDbServiceRegistryFacilitator}.
@@ -217,7 +218,9 @@ public class DynamoDbServiceRegistryFacilitator {
         final Map<String, AttributeValue> values = new HashMap<>();
         values.put(ColumnNames.ID.getColumnName(), new AttributeValue(String.valueOf(service.getId())));
         values.put(ColumnNames.NAME.getColumnName(), new AttributeValue(service.getName()));
-        values.put(ColumnNames.DESCRIPTION.getColumnName(), new AttributeValue(service.getDescription()));
+        if (StringUtils.isNotBlank(service.getDescription())) {
+            values.put(ColumnNames.DESCRIPTION.getColumnName(), new AttributeValue(service.getDescription()));
+        }
         values.put(ColumnNames.SERVICE_ID.getColumnName(), new AttributeValue(service.getServiceId()));
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         jsonSerializer.to(out, service);
