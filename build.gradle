@@ -161,7 +161,7 @@ subprojects {
     task dependencyCheckAnalyze(type: org.owasp.dependencycheck.gradle.tasks.Analyze)
 
     task allDependenciesInsight(type: DependencyInsightReportTask,
-            description: "Produce insight information for all dependencies") {
+            description: "Produce insight information for all dependencies.") {
         doLast {}
     }
     task allDependencies(type: DependencyReportTask,
