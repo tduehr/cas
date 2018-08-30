@@ -11,9 +11,9 @@ sudo: required
 dist: trusty
 services:
 - docker
-branches:
-  only:
-  - master
+#branches:
+#  only:
+#  - master
 # Enable once Travis CI fixed JDK setup
 #jdk:
   #- oraclejdk11
@@ -66,11 +66,11 @@ after_script:
 - ./ci/stop.sh
 stages:
 - initialize
+- spotbugs
 - publish
 - build
 - test
 - dependencies
-- spotbugs
 jobs:
   include:
   - stage: initialize
