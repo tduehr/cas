@@ -1,16 +1,16 @@
 container:
   image: gradle:jdk10
 
-maven_cache:
-  folder: /home/gradle/.m2
-  populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
 
 
 dependency_task:
   container:
     image: gradle:jdk10
-    cpu: 4
+    cpu: 2
     memory: 8G
+  maven_cache:
+    folder: /home/gradle/.m2
+    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
   gradle_cache:
     folder: ~/.gradle/caches
   analysis_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true dependencyCheckAggregate
@@ -19,6 +19,9 @@ dependency_task:
     - find ~/.gradle/caches/ -name "*.lock" -type f -delete
 
 spotbugs_main_task:
+  maven_cache:
+    folder: /home/gradle/.m2
+    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
   gradle_cache:
     folder: ~/.gradle/caches
   depends_on:
@@ -29,6 +32,9 @@ spotbugs_main_task:
     - find ~/.gradle/caches/ -name "*.lock" -type f -delete
 
 spotbugs_test_task:
+  maven_cache:
+    folder: /home/gradle/.m2
+    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
   gradle_cache:
     folder: ~/.gradle/caches
   depends_on:
