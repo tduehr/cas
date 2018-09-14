@@ -1,5 +1,7 @@
 container:
   image: gradle:jdk10
+  cpu: 4
+  memory: 8G
 
 dependency_task:
   maven_cache:
