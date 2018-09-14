@@ -1,0 +1,21 @@
+container:
+  image: gradle:jdk10
+
+dependency_task:
+  maven_cache:
+    folder: /home/gradle/.m2
+    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
+  test_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true dependencyCheckAggregate
+
+spotbugs_main_task:
+  maven_cache:
+    folder: /home/gradle/.m2
+    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
+  test_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true spotbugsMain
+
+spotbugs_test_task:
+  maven_cache:
+    folder: /home/gradle/.m2
+    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
+  test_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true spobugsTest
+
