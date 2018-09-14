@@ -3,25 +3,35 @@ container:
   cpu: 4
   memory: 8G
 
+maven_cache:
+  folder: /home/gradle/.m2
+  populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
+
+
 dependency_task:
-  maven_cache:
-    folder: /home/gradle/.m2
-    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
+  gradle_cache:
+    folder: ~/.gradle/caches
   analysis_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true dependencyCheckAggregate
+  cleanup_before_cache_script:
+    - rm -rf ~/.gradle/caches/$GRADLE_VERSION/
+    - find ~/.gradle/caches/ -name "*.lock" -type f -delete
 
 spotbugs_main_task:
+  gradle_cache:
+    folder: ~/.gradle/caches
   depends_on:
     - dependency
-  maven_cache:
-    folder: /home/gradle/.m2
-    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
   analysis_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true spotbugsMain
+  cleanup_before_cache_script:
+    - rm -rf ~/.gradle/caches/$GRADLE_VERSION/
+    - find ~/.gradle/caches/ -name "*.lock" -type f -delete
 
 spotbugs_test_task:
+  gradle_cache:
+    folder: ~/.gradle/caches
   depends_on:
     - dependency
-  maven_cache:
-    folder: /home/gradle/.m2
-    populate_script: ./gradlew downloadDependencies --parallel --refresh-dependencies
   analysis_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true spobugsTest
-
+  cleanup_before_cache_script:
+    - rm -rf ~/.gradle/caches/$GRADLE_VERSION/
+    - find ~/.gradle/caches/ -name "*.lock" -type f -delete
