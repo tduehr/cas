@@ -1,7 +1,5 @@
 container:
   image: gradle:jdk10
-  cpu: 4
-  memory: 8G
 
 maven_cache:
   folder: /home/gradle/.m2
@@ -9,6 +7,10 @@ maven_cache:
 
 
 dependency_task:
+  container:
+    image: gradle:jdk10
+    cpu: 4
+    memory: 8G
   gradle_cache:
     folder: ~/.gradle/caches
   analysis_script: ./gradlew --build-cache --configure-on-demand --no-daemon -x javadoc -x check -DskipNpmLint=true -DskipGradleLint=true --parallel -DskipSass=true -DskipNpmLint=true -DskipNodeModulesCleanUp=true -DskipNpmCache=true -DskipNestedConfigMetadataGen=true dependencyCheckAggregate
