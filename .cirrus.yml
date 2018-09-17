@@ -1,6 +1,12 @@
 container:
   image: gradle:jdk10
 
+env:
+  JAVA_OPTS: -Xms512m -Xmx2048m -Xss128m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -Xverify:none -server
+  GRADLE_OPTS: -Xms512m -Xmx1024m -Xss128m -XX:ReservedCodeCacheSize=512m -XX:+UseG1GC -Xverify:none -server
+  SPRING_MAIN_BANNER-MODE: off
+
+
 build_task:
   maven_cache:
     folder: /home/gradle/.m2
@@ -9,7 +15,7 @@ build_task:
     folder: ~/.gradle/caches
   build_script:
     - ./gradlew npmInstall --stacktrace -q
-    - ./gradlew --build-cache --configure-on-demand --no-daemon build -x test -x javadoc -x check -DskipNpmLint=true -DskipNestedConfigMetadataGen=true --parallel -Dorg.gradle.jvmargs="-Xmx4g -XX:SoftRefLRUPolicyMSPerMB=0 -noverify -server"
+    - ./gradlew --build-cache --configure-on-demand --no-daemon build -x test -x javadoc -x check -DskipNpmLint=true -DskipNestedConfigMetadataGen=true --parallel
   cleanup_before_cache_script:
     - rm -rf ~/.gradle/caches/$GRADLE_VERSION/
     - find ~/.gradle/caches/ -name "*.lock" -type f -delete
